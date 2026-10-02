@@ -1,0 +1,9 @@
+{
+  "/listings/[id]/page": "app/listings/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/about/page": "app/about/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/favorites/page": "app/favorites/page.js",
+  "/page": "app/page.js",
+  "/login/page": "app/login/page.js"
+}

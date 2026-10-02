@@ -1,0 +1,11 @@
+import "dotenv/config";
+import express from "express"; import cors from "cors"; import helmet from "helmet"; import rateLimit from "express-rate-limit";
+import { auth } from "./routes/auth"; import { listings } from "./routes/listings"; import { favorites } from "./routes/favorites"; import { admin } from "./routes/admin"; import { contact } from "./routes/contact";
+const app = express();
+app.use(helmet()); app.use(cors({ origin: process.env.CLIENT_URL })); app.use(express.json());
+app.use("/api/auth", rateLimit({ windowMs: 15*60*1000, limit: 50 }), auth);
+app.use("/api/listings", listings); app.use("/api/favorites", favorites);
+app.use("/api/admin", admin); app.use("/api/contact", rateLimit({ windowMs: 60*60*1000, limit: 10 }), contact);
+app.get("/api/health", (_, r) => r.json({ ok: true }));
+app.use((e: any, _q: express.Request, r: express.Response, _n: express.NextFunction) => { console.error(e); r.status(e.status || 500).json({ error: e.message || "Server error" }); });
+app.listen(process.env.PORT || 4000, () => console.log("API on :4000"));

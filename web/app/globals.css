@@ -1,0 +1,10 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+body { @apply bg-white text-ink antialiased; }
+:focus-visible { outline: 3px solid #C8102E; outline-offset: 2px; }
+@layer components {
+  .btn { @apply inline-flex items-center justify-center rounded-md bg-brand px-5 py-2.5 font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50; }
+  .btn-ghost { @apply inline-flex items-center justify-center rounded-md border border-brand px-5 py-2.5 font-semibold text-brand hover:bg-brand-soft; }
+  .input { @apply w-full rounded-md border border-neutral-300 bg-white px-3 py-2.5 focus:border-brand; }
+  .label { @apply mb-1 block text-sm font-medium; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

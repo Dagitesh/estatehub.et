@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  AGENT
+  ADMIN
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  LAND
+  COMMERCIAL
+}
+
+enum ListingMode {
+  SALE
+  RENT
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  phone     String?
+  role      Role       @default(BUYER)
+  banned    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  listings  Listing[]
+  favorites Favorite[]
+}
+
+model Listing {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  price       Int
+  type        PropertyType
+  mode        ListingMode  @default(SALE)
+  city        String
+  address     String
+  bedrooms    Int          @default(0)
+  bathrooms   Int          @default(0)
+  areaSqm     Int          @default(0)
+  images      String[]
+  approved    Boolean      @default(false)
+  agent       User         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  agentId     String
+  favorites   Favorite[]
+  createdAt   DateTime     @default(now())
+  @@index([city, price, type])
+}
+
+model Favorite {
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId String
+  @@id([userId, listingId])
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  listingId String?
+  createdAt DateTime @default(now())
+}
